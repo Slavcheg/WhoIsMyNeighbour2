@@ -44,6 +44,46 @@ export class Api {
     })
   }
 
+  async getCountries() {
+    const response: ApiResponse<any> = await this.apisauce.get(`/all`)
+    
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    const mapCountries = raw => {
+      return {        
+        name: raw.name,
+        topLevelDomain: raw.topLevelDomain,
+        alpha2Code : raw.alpha2Code,
+        alpha3Code : raw.alpha3Code,
+        callingCodes : raw.callingCodes,
+        capital : raw.capital,
+        altSpellings : raw.altSpellings,
+        region : raw.region,
+        subregion : raw.subregion,
+        population : raw.population,
+        latlng : raw.latlng,
+        demonym : raw.demonym,
+        area : raw.area || 0,
+        // gini : raw.gini,
+        timezones : raw.timezones,
+        borders : raw.borders,
+        nativeName : raw.nativeName,
+        numericCode : raw.numericCode || '',
+      }
+    }
+
+    try {
+      const rawCountries = response.data
+      const resultCountries = rawCountries.map(mapCountries)
+      return { kind: "ok", countries: resultCountries }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
   /**
    * Gets a list of users.
    */
