@@ -22,8 +22,78 @@ export const RootStoreModel = types.model("RootStore").props({
     }
 }))
 .views(self => ({
-    getCountry(){
-        return values(self.countries[0].topLevelDomain)
+    getCountry(alpha3code){
+       const country = self.countries.find(country => country.alpha3Code === alpha3code) || 'NaN'
+    //    console.log(country)
+    return country
+    },
+
+    findCountriesByTerm(term: string){
+            return self.countries
+                .filter(country => country.name.toLowerCase().includes(term))
+                .map(country => country.name)
+    },
+
+    findCountriesBetweenTimezones(startZone: any, endZone: any){
+        startZone = +startZone.slice(3,6)
+        endZone = +endZone.slice(3,6)
+
+
+        const isBetweenTimezones = (zones: number[]): boolean => {
+            let countryFallsBetweenTimezones: boolean = true
+            zones.map(zone => {                
+                if(!(startZone < zone && zone < endZone)){
+                    countryFallsBetweenTimezones = false
+                }
+            })
+            return countryFallsBetweenTimezones
+        }
+
+        let countriesBetween = self.countries.filter(country => isBetweenTimezones(country.timezones.map(zone => +zone.slice(3,6))))
+        return countriesBetween.map(country => country.name)
+    },
+
+    findNeighbours(alpha3code): string[]{
+        return self.countries.find(country => country.alpha3Code === alpha3code).borders
+    },
+
+    findNeighboursOfNeighbours(alpha3code): string[]{
+        let neighboursOfNeighbours: string[] = []
+        let neighbours = values(this.findNeighbours(alpha3code))
+        neighbours
+            .map(neighbour => {
+                values(this.findNeighbours(neighbour))
+                    .map(el => {
+                        neighboursOfNeighbours.push(el)
+                    })
+            })
+            
+        // remove duplicates
+        neighboursOfNeighbours = neighboursOfNeighbours.filter((a,b) => neighboursOfNeighbours.indexOf(a) === b)
+
+        // remove neighbours of target country and target country itself
+        neighboursOfNeighbours = neighboursOfNeighbours.filter(countryCode => !neighbours.includes(countryCode))
+        neighboursOfNeighbours = neighboursOfNeighbours.filter(countryCode => countryCode !== alpha3code)
+        
+        return neighboursOfNeighbours
+    },
+
+    findClosestNonNeighbour(alpha3code){
+        const distances: {
+            countryCode: string,
+            distanceFromTarget: number 
+        }[] = []
+        
+        this.findNeighboursOfNeighbours(alpha3code)
+            .map(country3code => {
+                distances.push({
+                    countryCode: country3code,
+                    distanceFromTarget: this.getDistanceByAlpha3Code(alpha3code, country3code)
+                })
+            })
+        distances.sort((a,b) => a.distanceFromTarget - b.distanceFromTarget)
+        // console.log(distances)
+        return distances[0]
     },
 
     getDistanceByLatLong(lat1, lon1, lat2, lon2){
@@ -40,7 +110,6 @@ export const RootStoreModel = types.model("RootStore").props({
 
         const d = Math.round((R * c)/1000); // in km
 
-        console.log(d)
         return d
     },
 

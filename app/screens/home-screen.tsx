@@ -53,25 +53,28 @@ export const HomeScreen: Component = observer(function HomeScreen() {
         style={btnStyle}
         textStyle={btnTextStyle}
         text={'Find distance'}
-        onPress={() => rootStore.getDistanceByAlpha3Code('ARM', 'ABW')}
+        onPress={() => console.log(rootStore.getDistanceByAlpha3Code('ARM', 'ABW'))}
       ></Button>
 
       <Button
         style={btnStyle}
         textStyle={btnTextStyle}
         text={'Find closest non - neighbour'}
+        onPress={() => console.log(rootStore.findClosestNonNeighbour('BGR'))}
       ></Button>
 
       <Button
         style={btnStyle}
         textStyle={btnTextStyle}
         text={'Find countries within timezones'}
+        onPress={() => console.log(rootStore.findCountriesBetweenTimezones('UTC+01:00', 'UTC+03:00'))}
       ></Button>
 
       <Button
         style={btnStyle}
         textStyle={btnTextStyle}
         text={'Find countries by search term'}
+        onPress={() => console.log(rootStore.findCountriesByTerm('ka'))}
       ></Button>
 
       <View
