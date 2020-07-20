@@ -3,16 +3,9 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Screen, Text, Button } from "../components"
 import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../models"
 import {screenStyles} from './screen-styles'
 
 export const HomeScreen: Component = observer(function HomeScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  // OR
-  const rootStore = useStores()
-  
-  // Pull in navigation via hook
   const navigation = useNavigation()
   return (
     <Screen style={screenStyles.screen} preset="scroll">
@@ -68,6 +61,7 @@ export const HomeScreen: Component = observer(function HomeScreen() {
         style={screenStyles.btnStyle}
         textStyle={screenStyles.btnTextStyle}
         text={'Log out'}
+        onPress={() => navigation.navigate('login')}
       ></Button>
 
     </Screen>

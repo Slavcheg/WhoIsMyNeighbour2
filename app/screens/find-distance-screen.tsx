@@ -10,16 +10,20 @@ export const FindDistanceScreen: Component = observer(function FindDistanceScree
   const [country1, setCountry1] = useState('')
   const [country2, setCountry2] = useState('')
   const [distance, setDistance] = useState(0)
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  // OR
+  const [showError, setError] = useState(false)
+
   const rootStore = useStores()
   
-  // Pull in navigation via hook
   const navigation = useNavigation()
 
   const findDistance = () => {
-    setDistance(rootStore.getDistanceByAlpha3Code(country1, country2))
+    try{
+      setDistance(rootStore.getDistanceByAlpha3Code(country1, country2))
+      setError(false)
+    } catch {
+      setError(true)
+    }
+    
   }
 
   return (
@@ -28,6 +32,11 @@ export const FindDistanceScreen: Component = observer(function FindDistanceScree
         style={screenStyles.heading} 
         preset="header"
         text="Find distance"
+      />
+
+      <Text
+        style={screenStyles.heading} 
+        text={'Please use 3 digit codes eg. BGR '}
       />
 
       <InputComponent 
@@ -53,6 +62,15 @@ export const FindDistanceScreen: Component = observer(function FindDistanceScree
         style={screenStyles.heading} 
         text={'Distance is: ' + distance + ' km'}
       />
+
+      {
+        showError ?
+            <Text
+              style={screenStyles.heading} 
+              text={'Wrongfull entries'}
+            />
+        : null
+      } 
       
       <View
         style={[{
