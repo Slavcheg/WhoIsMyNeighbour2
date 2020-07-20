@@ -1,33 +1,10 @@
 import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, TextStyle, View } from "react-native"
+import { View } from "react-native"
 import { Screen, Text, Button } from "../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../models"
-import { color } from "../theme"
-
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.lighterGrey,
-  flexGrow: 1,
-  alignItems: 'center',
-  paddingHorizontal: 20
-}
-
-const Heading: TextStyle = {
-  color: color.palette.orange,
-  alignSelf: 'center',
-  marginBottom: 30
-}
-
-const btnStyle: ViewStyle = {
-  width : '100%',
-  borderRadius: 30,
-  marginBottom: 30
-}
-
-const btnTextStyle: TextStyle = {
-  fontSize: 18
-}
+import {screenStyles} from './screen-styles'
 
 export const HomeScreen: Component = observer(function HomeScreen() {
   // Pull in one of our MST stores
@@ -38,43 +15,47 @@ export const HomeScreen: Component = observer(function HomeScreen() {
   // Pull in navigation via hook
   const navigation = useNavigation()
   return (
-    <Screen style={ROOT} preset="scroll">
+    <Screen style={screenStyles.screen} preset="scroll">
       <Text 
-        style={Heading} 
+        style={screenStyles.heading} 
         preset="header" 
         text={`Welcome to`}
       />
       <Text 
-        style={Heading} 
+        style={screenStyles.heading} 
         preset="header" 
         text={`Who Is My Neighbour`}
       />
       <Button
-        style={btnStyle}
-        textStyle={btnTextStyle}
+        style={screenStyles.btnStyle}
+        textStyle={screenStyles.btnTextStyle}
         text={'Find distance'}
-        onPress={() => console.log(rootStore.getDistanceByAlpha3Code('ARM', 'ABW'))}
+        // onPress={() => console.log(rootStore.getDistanceByAlpha3Code('ARM', 'ABW'))}
+        onPress={() => navigation.navigate('findDistance')}
       ></Button>
 
       <Button
-        style={btnStyle}
-        textStyle={btnTextStyle}
+        style={screenStyles.btnStyle}
+        textStyle={screenStyles.btnTextStyle}
         text={'Find closest non - neighbour'}
-        onPress={() => console.log(rootStore.findClosestNonNeighbour('BGR'))}
+        onPress={() => navigation.navigate('findClosestNonNeighbour')}
+        // onPress={() => console.log(rootStore.findClosestNonNeighbour('BGR'))}
       ></Button>
 
       <Button
-        style={btnStyle}
-        textStyle={btnTextStyle}
+        style={screenStyles.btnStyle}
+        textStyle={screenStyles.btnTextStyle}
         text={'Find countries within timezones'}
-        onPress={() => console.log(rootStore.findCountriesBetweenTimezones('UTC+01:00', 'UTC+03:00'))}
+        onPress={() => navigation.navigate('findCountriesWithinTimezones')}
+        // onPress={() => console.log(rootStore.findCountriesBetweenTimezones('UTC+01:00', 'UTC+03:00'))}
       ></Button>
 
       <Button
-        style={btnStyle}
-        textStyle={btnTextStyle}
+        style={screenStyles.btnStyle}
+        textStyle={screenStyles.btnTextStyle}
         text={'Find countries by search term'}
-        onPress={() => console.log(rootStore.findCountriesByTerm('ka'))}
+        onPress={() => navigation.navigate('findCountriesBySearchTerm')}
+        // onPress={() => console.log(rootStore.findCountriesByTerm('ka'))}
       ></Button>
 
       <View
@@ -84,8 +65,8 @@ export const HomeScreen: Component = observer(function HomeScreen() {
       ></View>
 
       <Button
-        style={[btnStyle]}
-        textStyle={btnTextStyle}
+        style={screenStyles.btnStyle}
+        textStyle={screenStyles.btnTextStyle}
         text={'Log out'}
       ></Button>
 

@@ -23,18 +23,18 @@ export const RootStoreModel = types.model("RootStore").props({
 }))
 .views(self => ({
     getCountry(alpha3code){
-       const country = self.countries.find(country => country.alpha3Code === alpha3code) || 'NaN'
+       const country = self.countries.find(country => country.alpha3Code === alpha3code)
     //    console.log(country)
-    return country
+    return country.name || 'NaN'
     },
 
-    findCountriesByTerm(term: string){
+    findCountriesByTerm(term: string):string[]{
             return self.countries
                 .filter(country => country.name.toLowerCase().includes(term))
                 .map(country => country.name)
     },
 
-    findCountriesBetweenTimezones(startZone: any, endZone: any){
+    findCountriesBetweenTimezones(startZone: any, endZone: any): string[]{
         startZone = +startZone.slice(3,6)
         endZone = +endZone.slice(3,6)
 
@@ -80,14 +80,15 @@ export const RootStoreModel = types.model("RootStore").props({
 
     findClosestNonNeighbour(alpha3code){
         const distances: {
-            countryCode: string,
+            country: string,
             distanceFromTarget: number 
         }[] = []
         
         this.findNeighboursOfNeighbours(alpha3code)
             .map(country3code => {
                 distances.push({
-                    countryCode: country3code,
+                    // country: this.getCountry(country3code),
+                    country: country3code,
                     distanceFromTarget: this.getDistanceByAlpha3Code(alpha3code, country3code)
                 })
             })
