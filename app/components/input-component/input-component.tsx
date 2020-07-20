@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { View, TextInput, StyleSheet } from "react-native";
 import { color, spacing } from "../../theme";
 
-export function InputComponent({placeholder, variable, setVariable}){
+export function InputComponent({placeholder, variable, setVariable, isPassword = false}){
 
     return (
         <View
@@ -23,6 +23,7 @@ export function InputComponent({placeholder, variable, setVariable}){
                 style={styles.inputContainerStyle}          
                 placeholder={placeholder}
                 defaultValue={variable}
+                secureTextEntry={isPassword}
             ></TextInput>
         </View>
     )

@@ -8,13 +8,12 @@ import React from "react"
 
 import { createNativeStackNavigator } from "react-native-screens/native-stack"
 import { 
-  WelcomeScreen, 
-  DemoScreen,
   HomeScreen,
   FindDistanceScreen,
   FindClosestNonNeighbourScreen,
   FindCountriesWithinTimezonesScreen,
-  FindCountriesBySearchTermScreen
+  FindCountriesBySearchTermScreen,
+  LogInScreen
 } from "../screens"
 
 /**
@@ -30,13 +29,12 @@ import {
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
-  welcome: undefined
-  demo: undefined
   home: undefined
   findDistance: undefined
   findClosestNonNeighbour: undefined
   findCountriesWithinTimezones: undefined
   findCountriesBySearchTerm: undefined
+  login: undefined
 }
 
 // Documentation: https://github.com/software-mansion/react-native-screens/tree/master/native-stack
@@ -49,10 +47,9 @@ export function PrimaryNavigator() {
         headerShown: false,
         gestureEnabled: true,
       }}
-      initialRouteName='home'
+      initialRouteName='login'
     >
-      {/* <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} /> */}
+      <Stack.Screen name="login" component={LogInScreen} />
       <Stack.Screen name="home" component={HomeScreen} />
       <Stack.Screen name="findDistance" component={FindDistanceScreen} />
       <Stack.Screen name="findClosestNonNeighbour" component={FindClosestNonNeighbourScreen} />
