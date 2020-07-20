@@ -9,17 +9,20 @@ import { View } from "react-native"
 export const FindCountriesBySearchTermScreen: Component = observer(function FindCountriesBySearchTermScreen() {
   const [term, setTerm] = useState('')
   const [result, setResult] = useState<string[]>([])
-  
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  // OR
+  const [showError, setError] = useState(false)
+
   const rootStore = useStores()
   
   // Pull in navigation via hook
   const navigation = useNavigation()
 
   const findCountries = () => {
-    setResult(rootStore.findCountriesByTerm(term))
+    try{
+      setResult(rootStore.findCountriesByTerm(term))
+      setError(false)
+    } catch {
+      setError(true)
+    }
   }
 
   return (
@@ -42,6 +45,15 @@ export const FindCountriesBySearchTermScreen: Component = observer(function Find
         text={'Find countries'}
         onPress={() => findCountries()}
       ></Button>
+
+      {
+        showError ?
+            <Text
+              style={screenStyles.heading} 
+              text={'Wrongfull entries'}
+            />
+        : null
+      } 
 
       {
         result.map(country => {

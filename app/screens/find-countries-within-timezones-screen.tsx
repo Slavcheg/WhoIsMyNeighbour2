@@ -11,17 +11,19 @@ export const FindCountriesWithinTimezonesScreen: Component = observer(function F
   const [startTimeZone, setStartTimeZone] = useState('')
   const [endTimeZone, setEndTimeZone] = useState('')
   const [countries, setCountries] = useState<string[]>([])
+  const [showError, setError] = useState(false)
   
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  // OR
   const rootStore = useStores()
   
-  // Pull in navigation via hook
   const navigation = useNavigation()
 
   const findCountries = () => {
+    try{
     setCountries(rootStore.findCountriesBetweenTimezones(startTimeZone, endTimeZone))
+    setError(false)
+  } catch {
+    setError(true)
+  }
   }
 
   return (
@@ -31,6 +33,12 @@ export const FindCountriesWithinTimezonesScreen: Component = observer(function F
         preset="header"
         text="Find Countries Within Timezones"
       />
+
+      <Text
+        style={screenStyles.heading} 
+        text={'Please use timezones in format eg. UTC+01:00, UTC-01:00 '}
+      />
+
       <InputComponent 
         placeholder={'Start Timezone'}
         variable={startTimeZone}
@@ -49,6 +57,15 @@ export const FindCountriesWithinTimezonesScreen: Component = observer(function F
         text={'Find countries'}
         onPress={() => findCountries()}
       ></Button>
+
+      {
+        showError ?
+            <Text
+              style={screenStyles.heading} 
+              text={'Wrongfull entries'}
+            />
+        : null
+      } 
 
       {
         countries.map(country => {

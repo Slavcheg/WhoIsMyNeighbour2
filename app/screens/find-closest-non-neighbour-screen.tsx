@@ -11,16 +11,19 @@ export const FindClosestNonNeighbourScreen: Component = observer(function FindCl
   
   const [country, setCountry] = useState('')
   const [closestNonNeighhbour, setClosestNonNeighhbour] = useState<any>({})
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  // OR
+  const [showError, setError] = useState(false)
+
   const rootStore = useStores()
   
-  // Pull in navigation via hook
   const navigation = useNavigation()
 
   const findClosestNonNeighbour= () => {
-    setClosestNonNeighhbour(rootStore.findClosestNonNeighbour(country))
+    try{
+      setClosestNonNeighhbour(rootStore.findClosestNonNeighbour(country))
+      setError(false)
+    } catch {
+      setError(true)
+    }
   }
 
   return (
@@ -29,6 +32,11 @@ export const FindClosestNonNeighbourScreen: Component = observer(function FindCl
         style={screenStyles.heading} 
         preset="header"
         text="Find Closest Non-Neighbour"
+      />
+
+      <Text
+        style={screenStyles.heading} 
+        text={'Please use 3 digit codes eg. BGR '}
       />
 
       <InputComponent 
@@ -51,6 +59,15 @@ export const FindClosestNonNeighbourScreen: Component = observer(function FindCl
           + ' with distance:'
           + closestNonNeighhbour.distanceFromTarget + ' km'}
       />
+
+      {
+        showError ?
+            <Text
+              style={screenStyles.heading} 
+              text={'Wrongfull entries'}
+            />
+        : null
+      } 
 
       <View
         style={[{
