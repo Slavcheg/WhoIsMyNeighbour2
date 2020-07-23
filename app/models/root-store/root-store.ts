@@ -28,12 +28,19 @@ export const RootStoreModel = types.model("RootStore").props({
     return country.name || 'NaN'
     },
 
+    // Task 4 is solved below
+    // Any term will be searched against 
+    // it may simply not return anything given a string that is not found anywhere
     findCountriesByTerm(term: string):string[]{
             return self.countries
                 .filter(country => country.name.toLowerCase().includes(term))
                 .map(country => country.name)
     },
 
+    // This solves task 3 
+    // If parameters are not in the stated form
+    // code would not be able to extract a number from the timezone entries
+    // hence will not be able to match agains the data
     findCountriesBetweenTimezones(startZone: any, endZone: any): string[]{
         startZone = +startZone.slice(3,6)
         endZone = +endZone.slice(3,6)
@@ -78,6 +85,8 @@ export const RootStoreModel = types.model("RootStore").props({
         return neighboursOfNeighbours
     },
 
+    // This solves task 2
+    // Again negative scenarios will be relates to wrognfull 3 digit codes
     findClosestNonNeighbour(alpha3code){
         const distances: {
             country: string,
@@ -114,6 +123,9 @@ export const RootStoreModel = types.model("RootStore").props({
         return d
     },
 
+    // This solves task 1
+    // As indicated in the respective screen/view
+    // if values are not in the form of 3 digits it will not be able to find the country below
     getDistanceByAlpha3Code(country1, country2){
         const lat1 = self.countries.find(country => country.alpha3Code === country1).latlng[0]
         const lon1 = self.countries.find(country => country.alpha3Code === country1).latlng[1]
